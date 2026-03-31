@@ -26,7 +26,7 @@ const client = new Client({
 
 const pontos = new Map();
 
-// ===== FORMATAR DATA (BRASIL 🇧🇷) =====
+// ===== FORMATAÇÃO BRASIL 🇧🇷 =====
 function formatarData(data) {
   return data.toLocaleString('pt-BR', {
     timeZone: 'America/Sao_Paulo',
@@ -124,7 +124,6 @@ client.on('interactionCreate', async interaction => {
         });
       }
 
-      // Evita iniciar 2 vezes
       if (pontos.has(user.id)) {
         return interaction.reply({
           content: '⚠️ Você já iniciou um ponto.',
@@ -149,17 +148,17 @@ client.on('interactionCreate', async interaction => {
       const botoes = new ActionRowBuilder().addComponents(
         new ButtonBuilder()
           .setCustomId('pausar')
-          .setLabel('Pausar')
+          .setLabel('⏸️ Pausar')
           .setStyle(ButtonStyle.Secondary),
 
         new ButtonBuilder()
           .setCustomId('voltar')
-          .setLabel('Voltar')
+          .setLabel('▶️ Voltar')
           .setStyle(ButtonStyle.Primary),
 
         new ButtonBuilder()
           .setCustomId('finalizar')
-          .setLabel('Finalizar')
+          .setLabel('⛔ Finalizar')
           .setStyle(ButtonStyle.Danger)
       );
 
@@ -174,6 +173,7 @@ client.on('interactionCreate', async interaction => {
   if (interaction.isButton()) {
 
     const data = pontos.get(interaction.user.id);
+
     if (!data) {
       return interaction.reply({
         content: '❌ Nenhum ponto ativo.',
