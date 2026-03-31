@@ -26,9 +26,10 @@ const client = new Client({
 
 const pontos = new Map();
 
-// ===== FORMATAR DATA (SEM SEGUNDOS) =====
+// ===== FORMATAR DATA (BRASIL 🇧🇷) =====
 function formatarData(data) {
   return data.toLocaleString('pt-BR', {
+    timeZone: 'America/Sao_Paulo',
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
@@ -123,6 +124,14 @@ client.on('interactionCreate', async interaction => {
         });
       }
 
+      // Evita iniciar 2 vezes
+      if (pontos.has(user.id)) {
+        return interaction.reply({
+          content: '⚠️ Você já iniciou um ponto.',
+          ephemeral: true
+        });
+      }
+
       const agora = new Date();
 
       pontos.set(user.id, {
@@ -165,7 +174,12 @@ client.on('interactionCreate', async interaction => {
   if (interaction.isButton()) {
 
     const data = pontos.get(interaction.user.id);
-    if (!data) return;
+    if (!data) {
+      return interaction.reply({
+        content: '❌ Nenhum ponto ativo.',
+        ephemeral: true
+      });
+    }
 
     const agora = new Date();
 
